@@ -63,7 +63,7 @@ def mutagenesis_report(antibody_name, model_name, job_id):
     with Parallel(n_jobs=n_jobs, verbose=1) as parallel:
         result = parallel(
             delayed(run_geoppi)(args)
-            for args in mutagenesis_list
+            for args in mutagenesis_list[:3]
         )
 
     result = np.array([np.float(x) for x in result])

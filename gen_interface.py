@@ -11,7 +11,7 @@ interface_info=  sys.argv[2]
 chainsAB = interface_info.split('_')
 chainsAB = chainsAB[0]+chainsAB[1]
 
-workdir=  sys.argv[3]
+workdir=sys.argv[3]
 cmd.load(pdbobject)
 interfaces= []
 
@@ -21,7 +21,7 @@ for i in range(len(chainsAB)):
 		if cha==chb:continue
 		cmd.do('interfaceResidue {}, chain {}, chain {}'.format(name, cha, chb))
 		mapp = {'chA':cha,'chB':chb}
-		ffile = open('temp/temp.txt','r')
+		ffile = open(f'temp/{name}.txt','r')
 		for line in ffile.readlines():
 			linee = line.strip().split('_')
 			resid = linee[0]
@@ -29,7 +29,7 @@ for i in range(len(chainsAB)):
 			inter='{}_{}_{}_{}'.format(cha,chb,chainn,resid)
 			if inter not in interfaces:
 				interfaces.append(inter)
-		os.system('rm temp/temp.txt')
+		os.system(f'rm temp/{name}.txt')
 ffile = open('{}/interface.txt'.format(workdir),'w')
 for x in interfaces:
 	ffile.write(x+'\n')
