@@ -54,8 +54,7 @@ def mutagenesis_report(antibody_name, model_name, job_id):
             str_list = ligand_residue.split("/")
             amino_acid_idx = np.where(np.array(INTEGER_TO_RESIDUE_THREE_LETTER) == np.array(str_list[2]))
             amino_acid_1_letter = INTEGER_TO_RESIDUE_ONE_LETTER[amino_acid_idx[0]][0]
-            if amino_acid != amino_acid_1_letter:
-                mutagenesis_list.append(f"python run.py {complex_file} {amino_acid_1_letter}B{str_list[1]}{amino_acid} A_B")
+            mutagenesis_list.append(f"python run.py {complex_file} {amino_acid_1_letter}B{str_list[1]}{amino_acid} A_B")
 
     # run job
     n_jobs = int(os.cpu_count())
