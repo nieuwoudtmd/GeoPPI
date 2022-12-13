@@ -40,6 +40,10 @@ def mutagenesis_report(antibody_name, model_name, job_id):
     # path to pdb file
     complex_file = os.path.join(data_dir, "pdb", model_name + ".pdb")
     molecular_interaction_report_file = os.path.join(data_dir, "molecular_interaction_report", model_name + ".xlsx")
+    mutagenesis_report_file = os.path.join(output_dir, model_name + ".xlsx")
+
+    if os.path.isfile(mutagenesis_report_file):
+        return
 
     # get interface residues
     # read molecular interaction
@@ -54,7 +58,7 @@ def mutagenesis_report(antibody_name, model_name, job_id):
             str_list = ligand_residue.split("/")
             amino_acid_idx = np.where(np.array(INTEGER_TO_RESIDUE_THREE_LETTER) == np.array(str_list[2]))
             amino_acid_1_letter = INTEGER_TO_RESIDUE_ONE_LETTER[amino_acid_idx[0]][0]
-            mutagenesis_list.append(f"python run.py {complex_file} {amino_acid_1_letter}B{str_list[1]}{amino_acid} A_B")
+            mutagenesis_list.append(f"python run.py {complex_file} {amino_acid_1_letter}B{str_list[1]}{amino_acid} HL_B")
 
     # run job
     n_jobs = int(os.cpu_count())
@@ -68,12 +72,7 @@ def mutagenesis_report(antibody_name, model_name, job_id):
     result = np.array([np.float(x) for x in result])
     result_reshaped = result.reshape(20, len(ligand_residues))
 
-    # # result test
-    # result = np.random.uniform(low=-2, high=2, size=(20*len(ligand_residues),))
-    # result_reshaped = result.reshape(20, len(ligand_residues))
-
     # create mutagenesis_exp dict:
-    mutagenesis_report_file = os.path.join(output_dir, model_name + ".xlsx")
     df = pd.DataFrame(columns=ligand_residues, data=result_reshaped, index=INTEGER_TO_RESIDUE_ONE_LETTER.tolist())
     df.style.set_precision(2).background_gradient(cmap="RdBu").hide_index().to_excel(mutagenesis_report_file, engine='openpyxl')
 
@@ -94,7 +93,7 @@ def ucl_project():
     model_name = ["rank4_model1_mdref_48", "rank5_model1_mdref_27"]
 
     for model in model_name:
-        print("Running mutagenesis experiment for:", model)
+        print("\nRunning mutagenesis experiment for:", model)
         mutagenesis_report(antibody_name, model, job_id)
 
 ucl_project()
