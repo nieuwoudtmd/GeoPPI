@@ -57,21 +57,21 @@ def mutagenesis_report(antibody_name, model_name, job_id):
             if amino_acid != amino_acid_1_letter:
                 mutagenesis_list.append(f"python run.py {complex_file} {amino_acid_1_letter}B{str_list[1]}{amino_acid} A_B")
 
-    # # run job
-    # n_jobs = int(os.cpu_count())
-    # # run multiple jobs
-    # with Parallel(n_jobs=n_jobs, verbose=1) as parallel:
-    #     result = parallel(
-    #         delayed(run_geoppi)(args)
-    #         for args in mutagenesis_list
-    #     )
-    #
-    # result = np.array([np.float(x) for x in result])
-    # result_reshaped = result.reshape(20, len(ligand_residues))
+    # run job
+    n_jobs = int(os.cpu_count())
+    # run multiple jobs
+    with Parallel(n_jobs=n_jobs, verbose=1) as parallel:
+        result = parallel(
+            delayed(run_geoppi)(args)
+            for args in mutagenesis_list
+        )
 
-    # result test
-    result = np.random.uniform(low=-2, high=2, size=(20*len(ligand_residues),))
+    result = np.array([np.float(x) for x in result])
     result_reshaped = result.reshape(20, len(ligand_residues))
+
+    # # result test
+    # result = np.random.uniform(low=-2, high=2, size=(20*len(ligand_residues),))
+    # result_reshaped = result.reshape(20, len(ligand_residues))
 
     # create mutagenesis_exp dict:
     mutagenesis_report_file = os.path.join(output_dir, model_name + ".xlsx")
@@ -86,7 +86,7 @@ def ucl_project():
     model_name = ["rank1_model0_mdref_23", "rank22_model1_mdref_44"]
 
     for model in model_name:
-        print("Running mutagenesis experiment for:", model)
+        print("\nRunning mutagenesis experiment for:", model)
         mutagenesis_report(antibody_name, model, job_id)
 
     # YTH54
