@@ -260,11 +260,20 @@ def main():
     except:
         print('File reading error: Please redownload the file {} from the GitHub website again!'.format(idxfile))
 
+    # create unique name for pdb file
+    pdb_file_name = pdbfile.split('/')[-1]
+    pdb_id = pdb_file_name.split('.')[0]
+    pdb_unique = pdb_id + "_" + mutationinfo
+    pdb_file_unique = pdb_unique + ".pdb"
 
-    os.system('cp {} ./'.format(pdbfile))
-    pdbfile = pdbfile.split('/')[-1]
-    pdb = pdbfile.split('.')[0]
-    workdir = 'temp'
+    os.system('cp {} ./{}'.format(pdbfile, pdb_file_unique))
+    # pdbfile = pdbfile.split('/')[-1]
+    pdbfile = pdb_file_unique
+    # pdb = pdbfile.split('.')[0]
+    pdb = pdb_unique
+
+    os.makedirs(f"sg_workdir/{pdb}", exist_ok=True)
+    workdir = f"sg_workdir/{pdb}"
     cutoff = 3
 
     if path.exists('./{}'.format(workdir)):
@@ -287,20 +296,20 @@ def main():
     graph_mutinfo.append('{}_{}'.format(chainid,resid))
 
     # build a pdb file that is mutated to it self
-    with open('individual_list.txt','w') as f:
+    with open(f'individual_list_{pdb}.txt','w') as f:
         cont = '{}{}{}{};'.format(wildname,chainid,resid,wildname)
         f.write(cont)
     comm = './foldx --command=BuildModel --pdb={}  --mutant-file={}  --output-dir={} --pdb-dir={} >{}/foldx.log'.format(\
-                                pdbfile,  'individual_list.txt', workdir, './',workdir)
+                                pdbfile,  f'individual_list_{pdb}.txt', workdir, './',workdir)
     os.system(comm)
     os.system('mv {}/{}_1.pdb   {}/wildtype.pdb '.format(workdir, pdb, workdir))
 
     # build the mutant file
-    with open('individual_list.txt','w') as f:
+    with open(f'individual_list_{pdb}.txt','w') as f:
         cont = '{}{}{}{};'.format(wildname,chainid,resid,mutname)
         f.write(cont)
     comm = './foldx --command=BuildModel --pdb={}  --mutant-file={}  --output-dir={} --pdb-dir={} >{}/foldx.log'.format(\
-                                pdbfile,  'individual_list.txt', workdir, './',workdir)
+                                pdbfile,  f'individual_list_{pdb}.txt', workdir, './',workdir)
     os.system(comm)
 
     wildtypefile = '{}/wildtype.pdb'.format(workdir, pdb)
@@ -336,20 +345,21 @@ def main():
                 wget https://media.githubusercontent.com/media/Liuxg16/largefiles/8167d5c365c92d08a81dffceff364f72d765805c/gbt-s4169.pkl -P trainedmodels/'.format(gbtfile))
 
     ddg = GeoPPIpredict(A,E,A_m,E_m, model, forest, sorted_idx,flag)
+    print(ddg, end="")
  
-    print('='*40+'Results'+'='*40)
-    if ddg<0:
-        mutationeffects = 'destabilizing'
-        print('The predicted binding affinity change (wildtype-mutant) is {} kcal/mol ({} mutation).'.format(ddg,mutationeffects))
-    elif ddg>0:
-        mutationeffects = 'stabilizing'
-        print('The predicted binding affinity change (wildtype-mutant) is {} kcal/mol ({} mutation).'.format(ddg,mutationeffects))
-    else:
-        print('The predicted binding affinity change (wildtype-mutant) is 0.0 kcal/mol.')
+    # print('='*40+'Results'+'='*40)
+    # if ddg<0:
+    #     mutationeffects = 'destabilizing'
+    #     print('The predicted binding affinity change (wildtype-mutant) is {} kcal/mol ({} mutation).'.format(ddg,mutationeffects))
+    # elif ddg>0:
+    #     mutationeffects = 'stabilizing'
+    #     print('The predicted binding affinity change (wildtype-mutant) is {} kcal/mol ({} mutation).'.format(ddg,mutationeffects))
+    # else:
+    #     print('The predicted binding affinity change (wildtype-mutant) is 0.0 kcal/mol.')
 
 
     os.system('rm ./{}'.format(pdbfile))
-    os.system('rm ./individual_list.txt')
+    os.system('rm ./individual_list_{}.txt'.format(pdb))
 
 if __name__ == "__main__":
     main()
