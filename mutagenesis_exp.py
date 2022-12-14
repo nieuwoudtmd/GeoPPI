@@ -26,7 +26,6 @@ def run_geoppi(command):
     stdout, stderr = process.communicate()
     stdout = stdout.decode('UTF-8')
     stderr = stderr.decode('UTF-8')
-    print(stdout, stderr)
 
     return stdout
 
