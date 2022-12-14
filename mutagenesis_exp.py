@@ -81,19 +81,24 @@ def ucl_project():
     # YTH24
     antibody_name = "YTH24"
     job_id = "ucl_project_part_2"
-    model_name = ["rank1_model0_mdref_23", "rank22_model1_mdref_44"]
+    model_name_epitope_4 = ["rank0_model1_mdref_2", "rank1_model0_mdref_23", "rank2_model1_mdref_1", "rank3_model3_mdref_20"]
+    model_name_epitope_0 = ["rank12_model0_mdref_15", "rank17_model0_mdref_136", "rank22_model1_mdref_44", "rank23_model1_mdref_36"]
 
-    for model in model_name:
-        print("\nRunning mutagenesis experiment for:", model)
+    for i, model in enumerate(model_name_epitope_4):
+        print(f"\nRunning mutagenesis experiment for: Epitope_4: Number {i}/4: {model} ")
         mutagenesis_report(antibody_name, model, job_id)
 
-    # YTH54
-    antibody_name = "YTH54"
-    job_id = "ucl_project_part_2"
-    model_name = ["rank4_model1_mdref_48", "rank5_model1_mdref_27"]
-
-    for model in model_name:
-        print("\nRunning mutagenesis experiment for:", model)
+    for i, model in enumerate(model_name_epitope_0):
+        print(f"\nRunning mutagenesis experiment for: Epitope_0: Number {i}/4: {model} ")
         mutagenesis_report(antibody_name, model, job_id)
+
+    # # YTH54
+    # antibody_name = "YTH54"
+    # job_id = "ucl_project_part_2"
+    # model_name = ["rank4_model1_mdref_48", "rank5_model1_mdref_27"]
+    #
+    # for model in model_name:
+    #     print("\nRunning mutagenesis experiment for:", model)
+    #     mutagenesis_report(antibody_name, model, job_id)
 
 ucl_project()
