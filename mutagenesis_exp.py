@@ -69,7 +69,12 @@ def mutagenesis_report(antibody_name, model_name, job_id):
         )
 
     result = np.array([np.float(x) for x in result])
-    result_reshaped = result.reshape(20, len(ligand_residues))
+    result_reshaped = result.reshape(len(ligand_residues), 20).T
+
+    # # result test
+    # results = np.random.uniform(low=-2, high=2, size=(20*len(ligand_residues),))
+    # resutls_reshaped = results.reshape(len(ligand_residues), 20)
+    # resutls_reshaped_transposed = resutls_reshaped.T
 
     # create mutagenesis_exp dict:
     df = pd.DataFrame(columns=ligand_residues, data=result_reshaped, index=INTEGER_TO_RESIDUE_ONE_LETTER.tolist())
@@ -77,27 +82,32 @@ def mutagenesis_report(antibody_name, model_name, job_id):
 
 def ucl_project():
 
-    # YTH24
-    antibody_name = "YTH24"
-    job_id = "ucl_project_part_2"
-    model_name_epitope_4 = ["rank0_model1_mdref_2", "rank1_model0_mdref_23", "rank2_model1_mdref_1", "rank3_model3_mdref_20"]
-    model_name_epitope_0 = ["rank12_model0_mdref_15", "rank17_model0_mdref_136", "rank22_model1_mdref_44", "rank23_model1_mdref_36"]
-
-    for i, model in enumerate(model_name_epitope_4):
-        print(f"\nRunning mutagenesis experiment for: Epitope_4: Number {i}/4: {model} ")
-        mutagenesis_report(antibody_name, model, job_id)
-
-    for i, model in enumerate(model_name_epitope_0):
-        print(f"\nRunning mutagenesis experiment for: Epitope_0: Number {i}/4: {model} ")
-        mutagenesis_report(antibody_name, model, job_id)
-
-    # # YTH54
-    # antibody_name = "YTH54"
+    # # YTH24
+    # antibody_name = "YTH24"
     # job_id = "ucl_project_part_2"
-    # model_name = ["rank4_model1_mdref_48", "rank5_model1_mdref_27"]
+    # model_name_epitope_4 = ["rank0_model1_mdref_2", "rank1_model0_mdref_23", "rank2_model1_mdref_1", "rank3_model3_mdref_20"]
+    # model_name_epitope_0 = ["rank12_model0_mdref_15", "rank17_model0_mdref_136", "rank22_model1_mdref_44", "rank23_model1_mdref_36"]
     #
-    # for model in model_name:
-    #     print("\nRunning mutagenesis experiment for:", model)
+    # for i, model in enumerate(model_name_epitope_4):
+    #     print(f"\nRunning mutagenesis experiment for: Epitope_4: Number {i+1}/4: {model} ")
     #     mutagenesis_report(antibody_name, model, job_id)
+    #
+    # for i, model in enumerate(model_name_epitope_0):
+    #     print(f"\nRunning mutagenesis experiment for: Epitope_0: Number {i+1}/4: {model} ")
+    #     mutagenesis_report(antibody_name, model, job_id)
+
+    # YTH24
+    antibody_name = "YTH54"
+    job_id = "ucl_project_part_2"
+    model_name_epitope_1_1 = ["rank4_model1_mdref_48", "rank30_model2_mdref_60", "rank36_model2_mdref_76"]
+    model_name_epitope_1_2 = ["rank5_model1_mdref_27", "rank11_model2_mdref_53", "rank18_model2_mdref_54", "rank24_model1_mdref_29"]
+
+    for i, model in enumerate(model_name_epitope_1_1):
+        print(f"\nRunning mutagenesis experiment for: Epitope_4: Number {i+1}/4: {model} ")
+        mutagenesis_report(antibody_name, model, job_id)
+
+    for i, model in enumerate(model_name_epitope_1_2):
+        print(f"\nRunning mutagenesis experiment for: Epitope_0: Number {i+1}/4: {model} ")
+        mutagenesis_report(antibody_name, model, job_id)
 
 ucl_project()

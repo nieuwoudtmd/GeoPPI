@@ -1,0 +1,51 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5 (c)              ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+1 models read: rank1_model0_mdref_23_TB2P.pdb
+Output: sg_workdir/rank1_model0_mdref_23_TB2P/rank1_model0_mdref_23_TB2P.log
+
+BackHbond       =               -323.18
+SideHbond       =               -130.25
+Energy_VdW      =               -646.63
+Electro         =               -35.61
+Energy_SolvP    =               907.19
+Energy_SolvH    =               -825.33
+Energy_vdwclash =               91.64
+energy_torsion  =               39.28
+backbone_vdwclash=              150.27
+Entropy_sidec   =               356.30
+Entropy_mainc   =               953.46
+water bonds     =               0.00
+helix dipole    =               -0.36
+loop_entropy    =               0.00
+cis_bond        =               3.37
+disulfide       =               -31.55
+kn electrostatic=               -0.43
+partial covalent interactions = 0.00
+Energy_Ionisation =             1.44
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  359.33
+
+Starting BuildModel
+Reading TB2P;
+Residue to Mutate THRB2 has residue index 231
+Mutating residue = THRB2 into PRO
+Your file run OK
+End time of FoldX: Tue Dec 13 14:41:22 2022
+Total time spend: 45.76 seconds.
+validated file "rank1_model0_mdref_23_TB2P_1.pdb" => successfully finished
+Cleaning BuildModel...DONE
