@@ -1,10 +1,11 @@
+import json
 import os
 import pandas as pd
 import numpy as np
 from subprocess import Popen, PIPE
 from joblib import delayed
 from joblib import Parallel
-
+import time
 
 INTEGER_TO_RESIDUE_ONE_LETTER = np.array([
     "A", "C", "D", "E", "F",
@@ -29,8 +30,89 @@ def run_geoppi(command):
 
     return stdout
 
-def mutagenesis_report(antibody_name, model_name, job_id):
 
+class Mutation:
+    def __init__(self, pdb_dir: str, mutation_info_list: list):
+        """
+        pdb_dir (str): path to pdb directory with mutant and wildtype file
+        mutation_info_list (list): list containing mutation information
+        """
+
+        # assign list information to variables
+        self.pdb_id = mutation_info_list[0]
+        self.mutation_chain = mutation_info_list[1]
+        self.mutation_residue_index = mutation_info_list[2]
+        self.receptor_chain = mutation_info_list[3]
+        self.ligand_chain = mutation_info_list[4]
+        self.mutation_info = mutation_info_list[5]
+
+        # path to files
+        self.wildtype_file = os.path.join(pdb_dir, f"{self.pdb_id}_{self.receptor_chain}_{self.ligand_chain}.pdb")
+        self.mutant_file = os.path.join(pdb_dir,
+                                        f"{self.pdb_id}_{self.receptor_chain}_{self.ligand_chain}_{self.mutation_info}.pdb")
+
+        # check if file exist
+        if not os.path.isfile(self.wildtype_file):
+            print("ERROR: CANNOT FIND WILDTYPE PDB.")
+        if not os.path.isfile(self.mutant_file):
+            print("ERROR: CANNOT FIND MUTANT PDB.")
+
+
+class Mutagenesis:
+    def __init__(self, project_dir, job_id):
+        self.project_dir = project_dir
+        self.job_id = job_id
+        self.output_dir = os.path.join("mutagenesis_jobs", self.project_dir.split("/")[-1], self.job_id)
+
+        # directory paths
+        self.job_dir = os.path.join(project_dir, job_id)
+        self.pdb_dir = os.path.join(project_dir, job_id, "pdb")
+        self.embedding_dir = os.path.join(self.output_dir, "embeddings")
+        os.makedirs(self.embedding_dir, exist_ok=True)
+
+        # file path
+        self.mutation_list_file = os.path.join(self.project_dir, self.job_id, "mutation_list", f"{self.job_id}.json")
+
+        # read mutation info file
+        self.mutation_list = json.load(open(self.mutation_list_file))
+
+    def run_geoppi(self):
+        pass
+
+    def run_geoppi_parallel(self, run_script):
+
+        command_line_list = []
+        for mutation_item in self.mutation_list:
+            # create Mutation object
+            mutation = Mutation(self.pdb_dir, mutation_item)
+            command_line_list.append(
+                f"python {run_script}.py {mutation.wildtype_file} {mutation.mutation_info} {mutation.receptor_chain}_{mutation.ligand_chain} {self.job_dir}")
+
+        # run job
+        n_jobs = int(os.cpu_count())
+        # run multiple jobs
+        with Parallel(n_jobs=n_jobs, verbose=1) as parallel:
+            result = parallel(
+                delayed(run_geoppi)(args)
+                for args in command_line_list
+            )
+        geoppi_result = np.array([float(x) for x in result])
+
+        # save in mutation_list_file
+        self.save_results(geoppi_result)
+
+    def save_results(self, results):
+
+        for mutation_item, prediction in zip(self.mutation_list, results):
+            mutation_item[6] = prediction
+
+        mutation_list_output_dir = os.path.join(self.output_dir, "mutation_list")
+        os.makedirs(mutation_list_output_dir)
+        mutation_list_geoppi = os.path.join(mutation_list_output_dir, f"{self.job_id}_geoppi_predictions.json")
+        with open(mutation_list_geoppi, 'w') as f:
+            json.dump(self.mutation_list, f)
+
+def mutagenesis_report(antibody_name, model_name, job_id):
     # paths
     data_dir = os.path.join("data", job_id, antibody_name)
     output_dir = os.path.join("mutagenesis_jobs", job_id, antibody_name)
@@ -57,7 +139,8 @@ def mutagenesis_report(antibody_name, model_name, job_id):
             str_list = ligand_residue.split("/")
             amino_acid_idx = np.where(np.array(INTEGER_TO_RESIDUE_THREE_LETTER) == np.array(str_list[2]))
             amino_acid_1_letter = INTEGER_TO_RESIDUE_ONE_LETTER[amino_acid_idx[0]][0]
-            mutagenesis_list.append(f"python run.py {complex_file} {amino_acid_1_letter}B{str_list[1]}{amino_acid} HL_B")
+            mutagenesis_list.append(
+                f"python run.py {complex_file} {amino_acid_1_letter}B{str_list[1]}{amino_acid} HL_B")
 
     # run job
     n_jobs = int(os.cpu_count())
@@ -78,10 +161,11 @@ def mutagenesis_report(antibody_name, model_name, job_id):
 
     # create mutagenesis_exp dict:
     df = pd.DataFrame(columns=ligand_residues, data=result_reshaped, index=INTEGER_TO_RESIDUE_ONE_LETTER.tolist())
-    df.style.set_precision(2).background_gradient(cmap="RdBu").hide_index().to_excel(mutagenesis_report_file, engine='openpyxl')
+    df.style.set_precision(2).background_gradient(cmap="RdBu").hide_index().to_excel(mutagenesis_report_file,
+                                                                                     engine='openpyxl')
+
 
 def ucl_project():
-
     # # YTH24
     # antibody_name = "YTH24"
     # job_id = "ucl_project_part_2"
@@ -100,14 +184,40 @@ def ucl_project():
     antibody_name = "YTH54"
     job_id = "ucl_project_part_2"
     model_name_epitope_1_1 = ["rank4_model1_mdref_48", "rank30_model2_mdref_60", "rank36_model2_mdref_76"]
-    model_name_epitope_1_2 = ["rank5_model1_mdref_27", "rank11_model2_mdref_53", "rank18_model2_mdref_54", "rank24_model1_mdref_29"]
+    model_name_epitope_1_2 = ["rank5_model1_mdref_27", "rank11_model2_mdref_53", "rank18_model2_mdref_54",
+                              "rank24_model1_mdref_29"]
 
     for i, model in enumerate(model_name_epitope_1_1):
-        print(f"\nRunning mutagenesis experiment for: Epitope_4: Number {i+1}/4: {model} ")
+        print(f"\nRunning mutagenesis experiment for: Epitope_4: Number {i + 1}/4: {model} ")
         mutagenesis_report(antibody_name, model, job_id)
 
     for i, model in enumerate(model_name_epitope_1_2):
-        print(f"\nRunning mutagenesis experiment for: Epitope_0: Number {i+1}/4: {model} ")
+        print(f"\nRunning mutagenesis experiment for: Epitope_0: Number {i + 1}/4: {model} ")
         mutagenesis_report(antibody_name, model, job_id)
 
-ucl_project()
+
+def bayer_project():
+    project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11")
+
+    epitope_complex_list = ["rank0_model3_mdref_258",
+                            "rank2_model3_mdref_48",
+                            "rank4_model0_mdref_73",
+                            "rank3_model3_mdref_194",
+                            "rank11_model2_mdref_84",
+                            "rank18_model2_mdref_118",
+                            "rank40_model0_mdref_157",
+                            "rank45_model1_mdref_252",
+                            "rank49_model0_mdref_60",
+                            "rank52_model2_mdref_114",
+                            "rank74_model2_mdref_36"]
+
+    for i, experiment in enumerate(epitope_complex_list[:1]):
+        time_start = time.time()
+        print(f"Running job({i+1}/{len(epitope_complex_list)}): {experiment} ")
+        mutagenesis_exp = Mutagenesis(project_dir, experiment)
+        mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
+        print(f"Experiment run time: {time_start - time.time()}")
+
+
+# ucl_project()
+bayer_project()

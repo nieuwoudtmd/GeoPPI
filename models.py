@@ -99,6 +99,6 @@ def GeoPPIpredict(A, E, A_m, E_m, model, forest, sorted_idx,flag):
     # Note that our model is able to predict a small value to the case of "no mutaiton" (e.g., TI17T). To further calibrate the prediction, we set the output of this case to zero.
     if flag: ddg=0.0
  
-    return ddg
+    return ddg, features
 
 
