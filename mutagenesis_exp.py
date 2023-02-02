@@ -71,10 +71,10 @@ class Mutagenesis:
         os.makedirs(self.embedding_dir, exist_ok=True)
 
         # file path
-        self.mutation_list_file = os.path.join(self.project_dir, self.job_id, "mutation_list", f"{self.job_id}.json")
+        self.mutation_entries_file = os.path.join(self.project_dir, self.job_id, "lists", f"{self.job_id}.json")
 
         # read mutation info file
-        self.mutation_list = json.load(open(self.mutation_list_file))
+        self.mutation_entries = json.load(open(self.mutation_entries_file))
 
     def run_geoppi(self):
         pass
@@ -82,7 +82,7 @@ class Mutagenesis:
     def run_geoppi_parallel(self, run_script):
 
         command_line_list = []
-        for mutation_item in self.mutation_list:
+        for mutation_item in self.mutation_entries:
             # create Mutation object
             mutation = Mutation(self.pdb_dir, mutation_item)
             command_line_list.append(
@@ -103,14 +103,14 @@ class Mutagenesis:
 
     def save_results(self, results):
 
-        for mutation_item, prediction in zip(self.mutation_list, results):
+        for mutation_item, prediction in zip(self.mutation_entries, results):
             mutation_item[6] = prediction
 
-        mutation_list_output_dir = os.path.join(self.output_dir, "mutation_list")
+        mutation_list_output_dir = os.path.join(self.output_dir, "lists")
         os.makedirs(mutation_list_output_dir)
-        mutation_list_geoppi = os.path.join(mutation_list_output_dir, f"{self.job_id}_geoppi_predictions.json")
+        mutation_list_geoppi = os.path.join(mutation_list_output_dir, "entries_geoppi_predictions.json")
         with open(mutation_list_geoppi, 'w') as f:
-            json.dump(self.mutation_list, f)
+            json.dump(self.mutation_entries, f)
 
 def mutagenesis_report(antibody_name, model_name, job_id):
     # paths
