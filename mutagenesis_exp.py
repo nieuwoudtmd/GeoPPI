@@ -211,7 +211,7 @@ def bayer_project():
                             "rank52_model2_mdref_114",
                             "rank74_model2_mdref_36"]
 
-    for i, experiment in enumerate(epitope_complex_list):
+    for i, experiment in enumerate(epitope_complex_list[1:]):
         time_start = time.time()
         print(f"Running job({i+1}/{len(epitope_complex_list)}): {experiment} ")
         mutagenesis_exp = Mutagenesis(project_dir, experiment)
