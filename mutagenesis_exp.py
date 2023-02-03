@@ -112,6 +112,7 @@ class Mutagenesis:
         with open(mutation_list_geoppi, 'w') as f:
             json.dump(self.mutation_entries, f)
 
+
 def mutagenesis_report(antibody_name, model_name, job_id):
     # paths
     data_dir = os.path.join("data", job_id, antibody_name)
@@ -186,7 +187,7 @@ def ucl_project():
 
     for i, experiment in enumerate(epitope_complex_list):
         time_start = time.time()
-        print(f"Running job({i+1}/{len(epitope_complex_list)}): {experiment} ")
+        print(f"Running job({i + 1}/{len(epitope_complex_list)}): {experiment} ")
         mutagenesis_exp = Mutagenesis(project_dir, experiment)
         mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
         print(f"Experiment run time: {time_start - time.time()}")
@@ -207,13 +208,34 @@ def bayer_project():
                             "rank52_model2_mdref_114",
                             "rank74_model2_mdref_36"]
 
-    for i, experiment in enumerate(epitope_complex_list[1:]):
+    for i, experiment in enumerate(epitope_complex_list):
         time_start = time.time()
-        print(f"Running job({i+1}/{len(epitope_complex_list)}): {experiment} ")
+        print(f"Running job({i + 1}/{len(epitope_complex_list)}): {experiment} ")
         mutagenesis_exp = Mutagenesis(project_dir, experiment)
         mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-ucl_project()
+def mutagenesis_experiment():
+    # complex list to evaluate in study
+    complex_list = ["3HFM", "3NGB", "1MHP"]
+
+    # epitope setup
+    epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
+                    "epitope_diff_3"]
+
+    for complex in complex_list:
+        project_dir = os.path.join(os.getcwd(), "data", f"mutagenesis_exp_{complex}")
+
+        for i, experiment in enumerate(epitope_list):
+            time_start = time.time()
+            print(f"Running job({i + 1}/{len(epitope_list)}): {experiment} ")
+            mutagenesis_exp = Mutagenesis(project_dir, experiment)
+            mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
+            print(f"Experiment run time: {time_start - time.time()}")
+
+
+mutagenesis_experiment()
+
+# ucl_project()
 # bayer_project()
