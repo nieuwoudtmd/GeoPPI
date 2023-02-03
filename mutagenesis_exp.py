@@ -71,7 +71,7 @@ class Mutagenesis:
         os.makedirs(self.embedding_dir, exist_ok=True)
 
         # file path
-        self.mutation_entries_file = os.path.join(self.project_dir, self.job_id, "lists", f"{self.job_id}.json")
+        self.mutation_entries_file = os.path.join(self.project_dir, self.job_id, "lists", "entries.json")
 
         # read mutation info file
         self.mutation_entries = json.load(open(self.mutation_entries_file))
