@@ -225,7 +225,7 @@ def mutagenesis_experiment():
                     "epitope_diff_3"]
 
     for complex in complex_list:
-        project_dir = os.path.join(os.getcwd(), "data", f"mutagenesis_exp_{complex}")
+        project_dir = os.path.join(os.getcwd(), "data", f"mutagenesis_experiment_{complex}")
 
         for i, experiment in enumerate(epitope_list):
             time_start = time.time()
