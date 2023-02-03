@@ -166,34 +166,30 @@ def mutagenesis_report(antibody_name, model_name, job_id):
 
 
 def ucl_project():
-    # # YTH24
-    # antibody_name = "YTH24"
-    # job_id = "ucl_project_part_2"
-    # model_name_epitope_4 = ["rank0_model1_mdref_2", "rank1_model0_mdref_23", "rank2_model1_mdref_1", "rank3_model3_mdref_20"]
-    # model_name_epitope_0 = ["rank12_model0_mdref_15", "rank17_model0_mdref_136", "rank22_model1_mdref_44", "rank23_model1_mdref_36"]
-    #
-    # for i, model in enumerate(model_name_epitope_4):
-    #     print(f"\nRunning mutagenesis experiment for: Epitope_4: Number {i+1}/4: {model} ")
-    #     mutagenesis_report(antibody_name, model, job_id)
-    #
-    # for i, model in enumerate(model_name_epitope_0):
-    #     print(f"\nRunning mutagenesis experiment for: Epitope_0: Number {i+1}/4: {model} ")
-    #     mutagenesis_report(antibody_name, model, job_id)
+    project_dir = os.path.join(os.getcwd(), "data", "ucl_CD40")
 
-    # YTH24
-    antibody_name = "YTH54"
-    job_id = "ucl_project_part_2"
-    model_name_epitope_1_1 = ["rank4_model1_mdref_48", "rank30_model2_mdref_60", "rank36_model2_mdref_76"]
-    model_name_epitope_1_2 = ["rank5_model1_mdref_27", "rank11_model2_mdref_53", "rank18_model2_mdref_54",
-                              "rank24_model1_mdref_29"]
+    # antibody_name = "YTH54"
+    antibody_name = "YTH24"
 
-    for i, model in enumerate(model_name_epitope_1_1):
-        print(f"\nRunning mutagenesis experiment for: Epitope_4: Number {i + 1}/4: {model} ")
-        mutagenesis_report(antibody_name, model, job_id)
+    # antibody related epitope dict
+    epitope_hotspot_dict = {"YTH24": {
+        "epitope_4": ["rank0_model1_mdref_2", "rank1_model0_mdref_23", "rank2_model1_mdref_1", "rank3_model3_mdref_20"],
+        "epitope_0": ["rank12_model0_mdref_15", "rank17_model0_mdref_136", "rank22_model1_mdref_44",
+                      "rank23_model1_mdref_36"]},
+        "YTH54": {
+            "epitope_1_1": ["rank4_model1_mdref_48", "rank30_model2_mdref_60", "rank36_model2_mdref_76"],
+            "epitope_1_2": ["rank5_model1_mdref_27", "rank11_model2_mdref_53", "rank18_model2_mdref_54",
+                            "rank24_model1_mdref_29"]}}
 
-    for i, model in enumerate(model_name_epitope_1_2):
-        print(f"\nRunning mutagenesis experiment for: Epitope_0: Number {i + 1}/4: {model} ")
-        mutagenesis_report(antibody_name, model, job_id)
+    # epitope hotspots for antibody
+    epitope_complex_list = epitope_hotspot_dict[antibody_name]["epitope_0"]
+
+    for i, experiment in enumerate(epitope_complex_list):
+        time_start = time.time()
+        print(f"Running job({i+1}/{len(epitope_complex_list)}): {experiment} ")
+        mutagenesis_exp = Mutagenesis(project_dir, experiment)
+        mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
+        print(f"Experiment run time: {time_start - time.time()}")
 
 
 def bayer_project():
@@ -219,5 +215,5 @@ def bayer_project():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-# ucl_project()
-bayer_project()
+ucl_project()
+# bayer_project()
