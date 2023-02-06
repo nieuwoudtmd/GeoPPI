@@ -224,7 +224,7 @@ def mutagenesis_experiment():
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
                     "epitope_diff_3"]
 
-    for complex in complex_list[1:]:
+    for complex in complex_list:
         project_dir = os.path.join(os.getcwd(), "data", f"mutagenesis_experiment_{complex}")
 
         for i, experiment in enumerate(epitope_list):
@@ -236,6 +236,5 @@ def mutagenesis_experiment():
 
 
 mutagenesis_experiment()
-
 # ucl_project()
 # bayer_project()
