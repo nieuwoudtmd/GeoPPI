@@ -107,7 +107,7 @@ class Mutagenesis:
             mutation_item[6] = prediction
 
         mutation_list_output_dir = os.path.join(self.output_dir, "lists")
-        os.makedirs(mutation_list_output_dir)
+        os.makedirs(mutation_list_output_dir, exist_ok=True)
         mutation_list_geoppi = os.path.join(mutation_list_output_dir, "entries_geoppi_predictions.json")
         with open(mutation_list_geoppi, 'w') as f:
             json.dump(self.mutation_entries, f)
