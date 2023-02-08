@@ -236,7 +236,7 @@ def mutagenesis_experiment():
 
 def mutagenesis_experiment_covid():
     # complex list to evaluate in study
-    complex_list = ["C002", "C104", "C105", "C110", "C119", "C121", "C135", "C144", "CR3022"]
+    complex_list = ["C002", "C104", "C105", "C119", "CR3022"]
 
     for i, complex in enumerate(complex_list):
         project_dir = os.path.join(os.getcwd(), "data", "mutagenesis_experiment_covid", complex)
@@ -248,7 +248,7 @@ def mutagenesis_experiment_covid():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-# mutagenesis_experiment()
-mutagenesis_experiment_covid()
+mutagenesis_experiment()
+# mutagenesis_experiment_covid()
 # ucl_project()
 # bayer_project()
