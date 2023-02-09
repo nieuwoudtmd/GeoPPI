@@ -248,7 +248,22 @@ def mutagenesis_experiment_covid():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
+def mutagenesis_experiment_covid_2():
+    # complex list to evaluate in study
+    complex_list = ["6M0J"]
+
+    for i, complex in enumerate(complex_list):
+        project_dir = os.path.join(os.getcwd(), "data", "mutagenesis_experiment_covid_2")
+
+        time_start = time.time()
+        print(f"Running job({i + 1}/{len(complex_list)}): {complex} ")
+        mutagenesis_exp = Mutagenesis(project_dir, complex)
+        mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
+        print(f"Experiment run time: {time_start - time.time()}")
+
+
 # mutagenesis_experiment()
-mutagenesis_experiment_covid()
+# mutagenesis_experiment_covid()
+mutagenesis_experiment_covid_2()
 # ucl_project()
 # bayer_project()
