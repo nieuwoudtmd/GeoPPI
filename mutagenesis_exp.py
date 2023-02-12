@@ -263,7 +263,7 @@ def mutagenesis_experiment_covid_2():
 
 
 # mutagenesis_experiment()
-# mutagenesis_experiment_covid()
-mutagenesis_experiment_covid_2()
+mutagenesis_experiment_covid()
+# mutagenesis_experiment_covid_2()
 # ucl_project()
 # bayer_project()
