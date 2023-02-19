@@ -195,6 +195,7 @@ def ucl_project():
 
 def bayer_project():
     project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11")
+    project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_mouse")
 
     epitope_complex_list = ["rank0_model3_mdref_258",
                             "rank2_model3_mdref_48",
@@ -207,6 +208,17 @@ def bayer_project():
                             "rank49_model0_mdref_60",
                             "rank52_model2_mdref_114",
                             "rank74_model2_mdref_36"]
+
+    epitope_complex_list = ["rank23_model1_mdref_107",
+                            "rank2_model2_mdref_76",
+                            "rank13_model1_mdref_213",
+                            "rank14_model3_mdref_93",
+                            "rank21_model3_mdref_59",
+                            "rank49_model2_mdref_93",
+                            "rank0_model2_mdref_260",
+                            "rank1_model1_mdref_7",
+                            "rank3_model0_mdref_91",
+                            "rank4_model0_mdref_79"]
 
     for i, experiment in enumerate(epitope_complex_list):
         time_start = time.time()
@@ -264,6 +276,6 @@ def mutagenesis_experiment_covid_2():
 
 # mutagenesis_experiment()
 # mutagenesis_experiment_covid()
-mutagenesis_experiment_covid_2()
+# mutagenesis_experiment_covid_2()
 # ucl_project()
-# bayer_project()
+bayer_project()
