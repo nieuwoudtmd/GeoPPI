@@ -6,6 +6,7 @@ from subprocess import Popen, PIPE
 from joblib import delayed
 from joblib import Parallel
 import time
+from mutate import mutate_EvoEF1
 
 INTEGER_TO_RESIDUE_ONE_LETTER = np.array([
     "A", "C", "D", "E", "F",
@@ -54,8 +55,6 @@ class Mutation:
         # check if file exist
         if not os.path.isfile(self.wildtype_file):
             print("ERROR: CANNOT FIND WILDTYPE PDB.")
-        if not os.path.isfile(self.mutant_file):
-            print("ERROR: CANNOT FIND MUTANT PDB.")
 
 
 class Mutagenesis:
@@ -68,6 +67,7 @@ class Mutagenesis:
         self.job_dir = os.path.join(project_dir, job_id)
         self.pdb_dir = os.path.join(project_dir, job_id, "pdb")
         self.embedding_dir = os.path.join(self.output_dir, "embeddings")
+        os.makedirs(self.pdb_dir, exist_ok=True)
         os.makedirs(self.embedding_dir, exist_ok=True)
 
         # file path
@@ -75,6 +75,29 @@ class Mutagenesis:
 
         # read mutation info file
         self.mutation_entries = json.load(open(self.mutation_entries_file))
+
+    def generate_mutants(self):
+
+        complex_file_list = []
+        mutant_dir_list = []
+        mutation_info_list = []
+        for mutation_item in self.mutation_entries:
+
+            mutation = Mutation(self.pdb_dir, mutation_item)
+
+            if not os.path.isfile(os.path.join(self.pdb_dir, mutation.mutant_file)):
+                complex_file_list.append(mutation.wildtype_file)
+                mutant_dir_list.append(self.pdb_dir)
+                mutation_info_list.append([mutation.mutation_info])
+
+        # run job
+        n_jobs = int(os.cpu_count())
+        # run multiple jobs
+        with Parallel(n_jobs=n_jobs, verbose=1) as parallel:
+            parallel(
+                delayed(mutate_EvoEF1)(complex_file, mutant_dir, mutation_info)
+                for complex_file, mutant_dir, mutation_info in zip(complex_file_list, mutant_dir_list, mutation_info_list)
+            )
 
     def run_geoppi(self):
         pass
@@ -224,6 +247,7 @@ def bayer_project():
         time_start = time.time()
         print(f"Running job({i + 1}/{len(epitope_complex_list)}): {experiment} ")
         mutagenesis_exp = Mutagenesis(project_dir, experiment)
+        mutagenesis_exp.generate_mutants()
         mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
         print(f"Experiment run time: {time_start - time.time()}")
 
@@ -231,18 +255,22 @@ def bayer_project():
 def mutagenesis_experiment():
     # complex list to evaluate in study
     complex_list = ["3HFM", "3NGB", "1MHP", "1JRH", "1VFB", "2JEL"]
+    complex_list = ["1DQJ", "1DVF", "2NYY", "1CHO", "1PPF"]
+
 
     # epitope setup
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
                     "epitope_diff_3"]
 
-    for complex in complex_list[3:5]:
-        project_dir = os.path.join(os.getcwd(), "data", f"mutagenesis_experiment_{complex}")
+    for complex in complex_list[:1]:
+        project_dir = os.path.join(os.getcwd(), "data", "mutagenesis_experiments", complex)
 
         for i, experiment in enumerate(epitope_list):
             time_start = time.time()
             print(f"Running job({i + 1}/{len(epitope_list)}): {experiment} ")
             mutagenesis_exp = Mutagenesis(project_dir, experiment)
+            print("Generating mutants")
+            mutagenesis_exp.generate_mutants()
             mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
             print(f"Experiment run time: {time_start - time.time()}")
 
@@ -274,8 +302,8 @@ def mutagenesis_experiment_covid_2():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-# mutagenesis_experiment()
+mutagenesis_experiment()
 # mutagenesis_experiment_covid()
 # mutagenesis_experiment_covid_2()
 # ucl_project()
-bayer_project()
+# bayer_project()
