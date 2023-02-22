@@ -23,6 +23,12 @@ def mutate_EvoEF1(wildtype_file_name, mutant_dir, mutation_info_list):
     wildtype_name = wildtype_file_path.stem
     mutant_name = wildtype_name + "_" + "_".join(mutation_info_list)
 
+    # create unique dir name
+    # when running parrallel processing, the output file "Model_001.pdb" must be unique
+    os.system(f"cp {wildtype_file_name} {os.path.join(wildtype_file_path.parent, mutant_name + '.pdb')}")
+    wildtype_file_path = Path(os.path.join(wildtype_file_path.parent, mutant_name + '.pdb'))
+
+
     # create mutation file input for EvoEF2
     individual_list_name = "individual_list_" + mutant_name + ".txt"
     individual_list_file = os.path.join(wildtype_file_path.parent, individual_list_name)
@@ -48,8 +54,11 @@ def mutate_EvoEF1(wildtype_file_name, mutant_dir, mutation_info_list):
     os.remove(os.path.join(wildtype_file_path.parent, individual_list_name))
 
     # change the name of the mutant file
-    os.system('mv {}/{}_Model_0001.pdb   {}/{}.pdb '.format(wildtype_file_path.parent, wildtype_name, mutant_dir,
+    os.system('mv {}/{}_Model_0001.pdb   {}/{}.pdb '.format(wildtype_file_path.parent, wildtype_file_path.stem, mutant_dir,
                                                             mutant_name))
+
+    # remove identity mutation WT
+    os.system(f"rm {wildtype_file_path.parent}/{wildtype_file_path.stem}_Model_0001_WT.pdb")
 
 
 def mutate_EvoEF2(wildtype_file_name, mutant_dir, mutation_info_list):
