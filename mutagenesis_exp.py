@@ -255,14 +255,14 @@ def bayer_project():
 def mutagenesis_experiment():
     # complex list to evaluate in study
     complex_list = ["3HFM", "3NGB", "1MHP", "1JRH", "1VFB", "2JEL"]
-    complex_list = ["1DQJ", "1DVF", "2NYY", "1CHO", "1PPF"]
+    complex_list = ["1DQJ", "1DVF", "1CHO", "1PPF"]
 
 
     # epitope setup
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
                     "epitope_diff_3"]
 
-    for complex in complex_list[:1]:
+    for complex in complex_list:
         project_dir = os.path.join(os.getcwd(), "data", "mutagenesis_experiments", complex)
 
         for i, experiment in enumerate(epitope_list):
