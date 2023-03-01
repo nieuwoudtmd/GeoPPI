@@ -96,7 +96,8 @@ class Mutagenesis:
         with Parallel(n_jobs=n_jobs, verbose=1) as parallel:
             parallel(
                 delayed(mutate_EvoEF1)(complex_file, mutant_dir, mutation_info)
-                for complex_file, mutant_dir, mutation_info in zip(complex_file_list, mutant_dir_list, mutation_info_list)
+                for complex_file, mutant_dir, mutation_info in
+                zip(complex_file_list, mutant_dir_list, mutation_info_list)
             )
 
     def run_geoppi(self):
@@ -216,33 +217,7 @@ def ucl_project():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-def bayer_project():
-    project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11")
-    project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_mouse")
-
-    epitope_complex_list = ["rank0_model3_mdref_258",
-                            "rank2_model3_mdref_48",
-                            "rank4_model0_mdref_73",
-                            "rank3_model3_mdref_194",
-                            "rank11_model2_mdref_84",
-                            "rank18_model2_mdref_118",
-                            "rank40_model0_mdref_157",
-                            "rank45_model1_mdref_252",
-                            "rank49_model0_mdref_60",
-                            "rank52_model2_mdref_114",
-                            "rank74_model2_mdref_36"]
-
-    epitope_complex_list = ["rank23_model1_mdref_107",
-                            "rank2_model2_mdref_76",
-                            "rank13_model1_mdref_213",
-                            "rank14_model3_mdref_93",
-                            "rank21_model3_mdref_59",
-                            "rank49_model2_mdref_93",
-                            "rank0_model2_mdref_260",
-                            "rank1_model1_mdref_7",
-                            "rank3_model0_mdref_91",
-                            "rank4_model0_mdref_79"]
-
+def bayer_project(project_dir, epitope_complex_list):
     for i, experiment in enumerate(epitope_complex_list):
         time_start = time.time()
         print(f"Running job({i + 1}/{len(epitope_complex_list)}): {experiment} ")
@@ -256,7 +231,6 @@ def mutagenesis_experiment():
     # complex list to evaluate in study
     complex_list = ["3HFM", "3NGB", "1MHP", "1JRH", "1VFB", "2JEL"]
     complex_list = ["1DQJ", "1DVF", "1CHO", "1PPF"]
-
 
     # epitope setup
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
@@ -273,6 +247,7 @@ def mutagenesis_experiment():
             mutagenesis_exp.generate_mutants()
             mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
             print(f"Experiment run time: {time_start - time.time()}")
+
 
 def mutagenesis_experiment_covid():
     # complex list to evaluate in study
@@ -302,8 +277,17 @@ def mutagenesis_experiment_covid_2():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-mutagenesis_experiment()
+# mutagenesis_experiment()
 # mutagenesis_experiment_covid()
 # mutagenesis_experiment_covid_2()
 # ucl_project()
-# bayer_project()
+
+# human
+project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_human")
+epitope_complex_list = ["rank83_model3_mdref_5"]
+bayer_project(project_dir, epitope_complex_list)
+
+# mouse
+project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_mouse")
+epitope_complex_list = ["rank183_model3_mdref_137"]
+bayer_project(project_dir, epitope_complex_list)
