@@ -284,10 +284,21 @@ def mutagenesis_experiment_covid_2():
 
 # human
 project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_human")
-epitope_complex_list = ["rank83_model3_mdref_5"]
-bayer_project(project_dir, epitope_complex_list)
+epitope_complex_list = ["rank83_model3_mdref_5",
+                        "rank170_model1_mdref_70",
+                        "rank171_model0_mdref_35",
+                        "rank355_model0_mdref_10",
+                        "rank82_model2_mdref_184",
+                        "rank152_model2_mdref_203",
+                        "rank21_model3_mdref_1"]
+bayer_project(project_dir, epitope_complex_list[1:])
 
 # mouse
 project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_mouse")
-epitope_complex_list = ["rank183_model3_mdref_137"]
-bayer_project(project_dir, epitope_complex_list)
+epitope_complex_list = ["rank183_model3_mdref_137",
+                        "rank448_model3_mdref_242",
+                        "rank372_model2_mdref_262",
+                        "rank242_model2_mdref_130",
+                        "rank399_model0_mdref_185",
+                        "rank436_model3_mdref_132"]
+bayer_project(project_dir, epitope_complex_list[1:])
