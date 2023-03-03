@@ -231,6 +231,7 @@ def mutagenesis_experiment():
     # complex list to evaluate in study
     complex_list = ["3HFM", "3NGB", "1MHP", "1JRH", "1VFB", "2JEL"]
     complex_list = ["1DQJ", "1DVF", "1CHO", "1PPF"]
+    complex_list = ["3SGB", "1R0R", "3BN9", "1CBW", "3C60"]
 
     # epitope setup
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
@@ -277,28 +278,28 @@ def mutagenesis_experiment_covid_2():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-# mutagenesis_experiment()
+mutagenesis_experiment()
 # mutagenesis_experiment_covid()
 # mutagenesis_experiment_covid_2()
 # ucl_project()
 
-# human
-project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_human")
-epitope_complex_list = ["rank83_model3_mdref_5",
-                        "rank170_model1_mdref_70",
-                        "rank171_model0_mdref_35",
-                        "rank355_model0_mdref_10",
-                        "rank82_model2_mdref_184",
-                        "rank152_model2_mdref_203",
-                        "rank21_model3_mdref_1"]
-bayer_project(project_dir, epitope_complex_list[1:])
-
-# mouse
-project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_mouse")
-epitope_complex_list = ["rank183_model3_mdref_137",
-                        "rank448_model3_mdref_242",
-                        "rank372_model2_mdref_262",
-                        "rank242_model2_mdref_130",
-                        "rank399_model0_mdref_185",
-                        "rank436_model3_mdref_132"]
-bayer_project(project_dir, epitope_complex_list[1:])
+# # human
+# project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_human")
+# epitope_complex_list = ["rank83_model3_mdref_5",
+#                         "rank170_model1_mdref_70",
+#                         "rank171_model0_mdref_35",
+#                         "rank355_model0_mdref_10",
+#                         "rank82_model2_mdref_184",
+#                         "rank152_model2_mdref_203",
+#                         "rank21_model3_mdref_1"]
+# bayer_project(project_dir, epitope_complex_list[1:])
+#
+# # mouse
+# project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_mouse")
+# epitope_complex_list = ["rank183_model3_mdref_137",
+#                         "rank448_model3_mdref_242",
+#                         "rank372_model2_mdref_262",
+#                         "rank242_model2_mdref_130",
+#                         "rank399_model0_mdref_185",
+#                         "rank436_model3_mdref_132"]
+# bayer_project(project_dir, epitope_complex_list[1:])
