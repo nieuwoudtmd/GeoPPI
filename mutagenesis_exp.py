@@ -242,7 +242,7 @@ def mutagenesis_experiment():
     for complex in complex_list:
         project_dir = os.path.join(os.getcwd(), "data", "mutagenesis_experiments", complex)
 
-        for i, experiment in enumerate(epitope_list[5:]):
+        for i, experiment in enumerate(epitope_list[6:]):
             time_start = time.time()
             print(f"Running job({i + 1}/{len(epitope_list)}): {experiment} ")
             mutagenesis_exp = Mutagenesis(project_dir, experiment)
