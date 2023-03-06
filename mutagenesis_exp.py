@@ -233,6 +233,7 @@ def mutagenesis_experiment():
     complex_list = ["1DQJ", "1DVF", "1CHO", "1PPF"]
     complex_list = ["3SGB", "1R0R", "3BN9", "1CBW", "3C60"]
     complex_list = ["3HFM", "3NGB", "1MHP", "1JRH"]
+    complex_list = ["3HFM", "1MHP", "1JRH"]
 
     # epitope setup
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
