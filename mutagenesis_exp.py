@@ -232,14 +232,16 @@ def mutagenesis_experiment():
     complex_list = ["3HFM", "3NGB", "1MHP", "1JRH", "1VFB", "2JEL"]
     complex_list = ["1DQJ", "1DVF", "1CHO", "1PPF"]
     complex_list = ["3SGB", "1R0R", "3BN9", "1CBW", "3C60"]
+    complex_list = ["3HFM", "3NGB", "1MHP", "1JRH"]
 
     # epitope setup
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
                     "epitope_diff_3"]
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
                     "epitope_diff_3", "epitope_diff_4", "epitope_diff_5"]
+    epitope_list = ["mdref_1", "mdref_2", "mdref_3"]
 
-    for complex in complex_list[:1]:
+    for complex in complex_list:
         project_dir = os.path.join(os.getcwd(), "data", "mutagenesis_experiments", complex)
 
         for i, experiment in enumerate(epitope_list):
