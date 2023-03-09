@@ -233,7 +233,6 @@ def mutagenesis_experiment():
     complex_list = ["1DQJ", "1DVF", "1CHO", "1PPF"]
     complex_list = ["3SGB", "1R0R", "3BN9", "1CBW", "3C60"]
     complex_list = ["3HFM", "3NGB", "1MHP", "1JRH"]
-    complex_list = ["3HFM", "1MHP", "1JRH"]
 
     # epitope setup
     epitope_list = ["epitope_original", "epitope_top_1", "epitope_top_2", "epitope_diff_1", "epitope_diff_2",
@@ -245,6 +244,25 @@ def mutagenesis_experiment():
     for complex in complex_list:
         project_dir = os.path.join(os.getcwd(), "data", "mutagenesis_experiments", complex)
         project_dir = os.path.join(os.getcwd(), "data", "mutagenesis_experiments_ab_modelled", complex)
+
+        for i, experiment in enumerate(epitope_list):
+            time_start = time.time()
+            print(f"Running job({i + 1}/{len(epitope_list)}): {experiment} ")
+            mutagenesis_exp = Mutagenesis(project_dir, experiment)
+            print("Generating mutants")
+            mutagenesis_exp.generate_mutants()
+            mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
+            print(f"Experiment run time: {time_start - time.time()}")
+
+def epitope_hunt():
+    # complex list to evaluate in study
+    complex_list = ["3HFM", "1MHP", "1JRH"]
+
+    # epitope setup
+    epitope_list = [f"epitope_cluster_{x}_model_{y}" for x in range(1, 21) for y in range(1,3)]
+
+    for complex in complex_list:
+        project_dir = os.path.join(os.getcwd(), "data", "epitope_hunt", complex)
 
         for i, experiment in enumerate(epitope_list):
             time_start = time.time()
@@ -284,7 +302,8 @@ def mutagenesis_experiment_covid_2():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-mutagenesis_experiment()
+# mutagenesis_experiment()
+epitope_hunt()
 # mutagenesis_experiment_covid()
 # mutagenesis_experiment_covid_2()
 # ucl_project()
