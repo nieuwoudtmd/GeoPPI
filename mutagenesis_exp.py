@@ -54,7 +54,7 @@ class Mutation:
 
         # check if file exist
         if not os.path.isfile(self.wildtype_file):
-            print("ERROR: CANNOT FIND WILDTYPE PDB.")
+            print(f"ERROR: CANNOT FIND WILDTYPE PDB: {self.wildtype_file}")
 
 
 class Mutagenesis:
