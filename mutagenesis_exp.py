@@ -64,14 +64,14 @@ class Mutagenesis:
         self.output_dir = os.path.join("mutagenesis_jobs", self.project_dir.split("/")[-1], self.job_id)
 
         # directory paths
-        self.job_dir = os.path.join(project_dir, job_id)
-        self.pdb_dir = os.path.join(project_dir, job_id, "pdb")
+        self.job_dir = os.path.join(project_dir, "experiments", job_id)
+        self.pdb_dir = os.path.join(self.job_dir, "pdb")
         self.embedding_dir = os.path.join(self.output_dir, "embeddings")
         os.makedirs(self.pdb_dir, exist_ok=True)
         os.makedirs(self.embedding_dir, exist_ok=True)
 
         # file path
-        self.mutation_entries_file = os.path.join(self.project_dir, self.job_id, "lists", "entries.json")
+        self.mutation_entries_file = os.path.join(self.job_dir, "lists", "entries.json")
 
         # read mutation info file
         self.mutation_entries = json.load(open(self.mutation_entries_file))
@@ -286,7 +286,7 @@ def bayer_part2():
     epitope_list = [f"mdref_{i}" for i in range(1, 31)]
 
     for complex in experiment_list:
-        project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11", complex, "experiments")
+        project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11", complex)
 
         for i, experiment in enumerate(epitope_list):
             time_start = time.time()
