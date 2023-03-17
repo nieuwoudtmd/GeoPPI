@@ -276,7 +276,7 @@ def epitope_hunt():
 
 
 def bayer_part2():
-    # complex list to evaluate in study
+    # complex list to evaluate in studies
     experiment_list = ["rank0_model3_mdref_258_r_b_rank0_model3_mdref_258_l_b_paratope_EveParatope_epitope_no_info",
                        "rank3_model3_mdref_194_r_b_rank3_model3_mdref_194_l_b_paratope_EveParatope_epitope_no_info",
                        "rank0_model3_mdref_258_r_b_rank0_model3_mdref_258_l_b_paratope_EveParatopeANDexp_epitope_no_info",
