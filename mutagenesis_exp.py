@@ -254,14 +254,38 @@ def mutagenesis_experiment():
             mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
             print(f"Experiment run time: {time_start - time.time()}")
 
+
 def epitope_hunt():
     # complex list to evaluate in study
     complex_list = ["3HFM", "1MHP", "1JRH"]
 
     # epitope setup
-    epitope_list = [f"epitope_cluster_{x}_model_{y}" for x in range(1, 21) for y in range(1,3)]
+    epitope_list = [f"epitope_cluster_{x}_model_{y}" for x in range(1, 21) for y in range(1, 3)]
 
     for complex in complex_list:
+        project_dir = os.path.join(os.getcwd(), "data", "epitope_hunt", complex)
+
+        for i, experiment in enumerate(epitope_list):
+            time_start = time.time()
+            print(f"Running job({i + 1}/{len(epitope_list)}): {experiment} ")
+            mutagenesis_exp = Mutagenesis(project_dir, experiment)
+            print("Generating mutants")
+            mutagenesis_exp.generate_mutants()
+            mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
+            print(f"Experiment run time: {time_start - time.time()}")
+
+
+def bayer_part2():
+    # complex list to evaluate in study
+    experiment_list = ["rank0_model3_mdref_258_r_b_rank0_model3_mdref_258_l_b_paratope_EveParatope_epitope_no_info",
+                       "rank3_model3_mdref_194_r_b_rank3_model3_mdref_194_l_b_paratope_EveParatope_epitope_no_info",
+                       "rank0_model3_mdref_258_r_b_rank0_model3_mdref_258_l_b_paratope_EveParatopeANDexp_epitope_no_info",
+                       "rank3_model3_mdref_194_r_b_rank3_model3_mdref_194_l_b_paratope_EveParatopeANDexp_epitope_no_info"]
+
+    # epitope setup
+    epitope_list = [f"mdref_{i}" for i in range(1, 31)]
+
+    for complex in experiment_list:
         project_dir = os.path.join(os.getcwd(), "data", "epitope_hunt", complex)
 
         for i, experiment in enumerate(epitope_list):
@@ -303,28 +327,8 @@ def mutagenesis_experiment_covid_2():
 
 
 # mutagenesis_experiment()
-epitope_hunt()
+# epitope_hunt()
+bayer_part2()
 # mutagenesis_experiment_covid()
 # mutagenesis_experiment_covid_2()
 # ucl_project()
-
-# # human
-# project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_human")
-# epitope_complex_list = ["rank83_model3_mdref_5",
-#                         "rank170_model1_mdref_70",
-#                         "rank171_model0_mdref_35",
-#                         "rank355_model0_mdref_10",
-#                         "rank82_model2_mdref_184",
-#                         "rank152_model2_mdref_203",
-#                         "rank21_model3_mdref_1"]
-# bayer_project(project_dir, epitope_complex_list[1:])
-#
-# # mouse
-# project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11_mouse")
-# epitope_complex_list = ["rank183_model3_mdref_137",
-#                         "rank448_model3_mdref_242",
-#                         "rank372_model2_mdref_262",
-#                         "rank242_model2_mdref_130",
-#                         "rank399_model0_mdref_185",
-#                         "rank436_model3_mdref_132"]
-# bayer_project(project_dir, epitope_complex_list[1:])
