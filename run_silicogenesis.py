@@ -256,7 +256,7 @@ def main():
     data_dir = sys.argv[4]
 
     # output dir
-    project_name = data_dir.split('/')[-2]
+    project_name = data_dir.split('/')[-3]
     job_id = data_dir.split('/')[-1]
     output_dir = os.path.join("mutagenesis_jobs", project_name, job_id)
     output_embeddings_dir = os.path.join(output_dir, "embeddings")

@@ -285,8 +285,8 @@ def bayer_part2():
     # epitope setup
     epitope_list = [f"mdref_{i}" for i in range(1, 6)]
 
-    for complex in experiment_list:
-        project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11", complex)
+    for experiment in experiment_list:
+        project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11", experiment)
 
         for i, experiment in enumerate(epitope_list):
             time_start = time.time()
