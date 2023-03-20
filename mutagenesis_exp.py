@@ -283,7 +283,7 @@ def bayer_part2():
                        "rank3_model3_mdref_194_r_b_rank3_model3_mdref_194_l_b_paratope_EveParatopeANDexp_epitope_no_info"]
 
     # epitope setup
-    epitope_list = [f"mdref_{i}" for i in range(1, 6)]
+    epitope_list = [f"mdref_{i}" for i in range(1, 11)]
 
     for experiment in experiment_list:
         project_dir = os.path.join(os.getcwd(), "data", "bayer_IL11", experiment)
