@@ -329,7 +329,7 @@ def bayer_PAD4():
 
     project_name = "bayer_PAD4"
     experiment_name = "md_simulation_bayer"
-    job_id_list = [f"B276_cluster_{x}_C_A" for x in range(0, 10)]
+    job_id_list = [f"B276_cluster_{x}" for x in range(0, 10)]
 
     project_dir = os.path.join(os.getcwd(), "data", project_name, experiment_name, "experiments")
 
