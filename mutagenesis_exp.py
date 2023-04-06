@@ -66,11 +66,13 @@ class Mutagenesis:
         self.job_dir = os.path.join(project_dir, job_id)
         self.pdb_dir = os.path.join(self.job_dir, "pdb")
         self.embedding_dir = os.path.join(self.job_dir, "embeddings")
+        self.list_dir = os.path.join(self.job_dir, "lists")
         os.makedirs(self.pdb_dir, exist_ok=True)
         os.makedirs(self.embedding_dir, exist_ok=True)
+        os.makedirs(self.list_dir, exist_ok=True)
 
         # file path
-        self.mutation_entries_file = os.path.join(self.job_dir, "lists", "entries.json")
+        self.mutation_entries_file = os.path.join(self.list_dir, "entries.json")
 
         # read mutation info file
         self.mutation_entries = json.load(open(self.mutation_entries_file))
@@ -129,9 +131,7 @@ class Mutagenesis:
         for mutation_item, prediction in zip(self.mutation_entries, results):
             mutation_item[6] = prediction
 
-        mutation_list_output_dir = os.path.join(self.output_dir, "lists")
-        os.makedirs(mutation_list_output_dir, exist_ok=True)
-        mutation_list_geoppi = os.path.join(mutation_list_output_dir, "entries_geoppi_predictions.json")
+        mutation_list_geoppi = os.path.join(self.list_dir, "entries_geoppi_predictions.json")
         with open(mutation_list_geoppi, 'w') as f:
             json.dump(self.mutation_entries, f)
 
