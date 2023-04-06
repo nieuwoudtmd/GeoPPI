@@ -61,12 +61,11 @@ class Mutagenesis:
     def __init__(self, project_dir, job_id):
         self.project_dir = project_dir
         self.job_id = job_id
-        self.output_dir = os.path.join("mutagenesis_jobs", self.project_dir.split("/")[-1], self.job_id)
 
         # directory paths
-        self.job_dir = os.path.join(project_dir, "experiments", job_id)
+        self.job_dir = os.path.join(project_dir, job_id)
         self.pdb_dir = os.path.join(self.job_dir, "pdb")
-        self.embedding_dir = os.path.join(self.output_dir, "embeddings")
+        self.embedding_dir = os.path.join(self.job_dir, "embeddings")
         os.makedirs(self.pdb_dir, exist_ok=True)
         os.makedirs(self.embedding_dir, exist_ok=True)
 
@@ -326,9 +325,22 @@ def mutagenesis_experiment_covid_2():
         print(f"Experiment run time: {time_start - time.time()}")
 
 
-# mutagenesis_experiment()
-# epitope_hunt()
-bayer_part2()
-# mutagenesis_experiment_covid()
-# mutagenesis_experiment_covid_2()
-# ucl_project()
+def bayer_PAD4():
+
+    project_name = "bayer_PAD4"
+    experiment_name = "md_simulation_bayer"
+    job_id_list = [f"mdref_{i}" for i in range(1, 11)]
+
+    project_dir = os.path.join(os.getcwd(), "data", project_name, experiment_name, "experiments")
+
+    for i, job_id in enumerate(job_id_list):
+        time_start = time.time()
+        print(f"Running job({i + 1}/{len(job_id_list)}): {job_id} ")
+        mutagenesis_exp = Mutagenesis(project_dir, job_id)
+        print("Generating mutants")
+        mutagenesis_exp.generate_mutants()
+        mutagenesis_exp.run_geoppi_parallel(run_script="run_silicogenesis")
+        print(f"Experiment run time: {time_start - time.time()}")
+
+
+bayer_PAD4()
